@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Control Panel
+{% endblock title %}
+
+{% block script %}
+<script src="{% static 'scripts/redirects_onclick.js' %}"></script>
+{% endblock script %}
+
+{% block content %}
+<div class="container">
+
+        <h1>Control Panel</h1>
+
+        <div class="section">
+            <h2>Follow state</h2>
+            <div class="buttons">
+                <button id="device-a-state">device A</button>
+                <button id="device-b-state">device B</button>
+                <button id="block-c-state">block C</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>For device B</h2>
+            <div class="buttons">
+                <button id="device-b-frames-sender">send command/s</button>
+                <button id="device-b-edit-config">edit config</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>APP config</h2>
+            <div class="buttons">
+                <button id="app-edit-config">edit</button>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}
