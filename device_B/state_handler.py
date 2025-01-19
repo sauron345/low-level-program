@@ -1,14 +1,13 @@
-from django.shortcuts import render
-from django.views import View
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
-class StateHandler(View):
-
-    _TEMPLATE_NAME = "device-b/state.html"
+class StateHandler(APIView):
 
     def get(self, request, *args, **kwargs):
-        return render(
-            request,
-            self._TEMPLATE_NAME,
-            {}
-        )
+        from recruitment_task_krypton.startup import dev_b_storage_handler
+
+        frames_data = dev_b_storage_handler.get_data()
+
+        return Response(frames_data, status=status.HTTP_200_OK)
