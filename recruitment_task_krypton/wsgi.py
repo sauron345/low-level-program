@@ -13,10 +13,10 @@ from django.core.wsgi import get_wsgi_application
 
 import atexit
 
-from recruitment_task_krypton.startup import close_gateways
+from recruitment_task_krypton.startup import main_close
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recruitment_task_krypton.settings')
 
 application = get_wsgi_application()
 
-atexit.register(close_gateways)
+atexit.register(main_close)

@@ -2,9 +2,24 @@
 {% load static %}
 
 {% block title %}
-    APP Config Edit
+    APP Edit Config
 {% endblock title %}
 
 {% block content %}
+<h1>APP Edit Config</h1>
 
+<form action="{% url 'app-edit-config' %}" method="post">
+    {% csrf_token %}
+    {% for form in forms %}
+        {% if form == arithmetic_operator_form %}
+            <label>{{ form.arithmetic_operator_form.label|linebreaksbr }}</label>
+        {% endif %}
+        {{ form.as_p }}
+    {% endfor %}
+    <button type="submit">Submit</button>
+</form>
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'scripts/auto_spaces_for_line.js' %}"></script>
+{% endblock script %}

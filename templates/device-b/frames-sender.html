@@ -6,5 +6,15 @@
 {% endblock title %}
 
 {% block content %}
+<h1>Device-B Frames Sender</h1>
 
+<form action="{% url 'device_b_frames_sender' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'scripts/auto_spaces_for_lines.js' %}"></script>
+{% endblock script %}

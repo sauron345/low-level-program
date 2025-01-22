@@ -9,5 +9,6 @@ class StateHandler(APIView):
         from recruitment_task_krypton.startup import dev_a_storage_handler
 
         frames_data = dev_a_storage_handler.get_data()
-
-        return Response(frames_data, status=status.HTTP_200_OK)
+        if frames_data:
+            return Response(frames_data, status=status.HTTP_200_OK)
+        return Response({'error': 'Frames are not passed to the server'}, status=status.HTTP_404_NOT_FOUND)

@@ -1,5 +1,4 @@
 import socket
-
 import can
 
 
@@ -10,16 +9,14 @@ class DeviceGatewayRunner:
     _MAX_ALLOWED_CLIENTS = 4
 
     def __init__(
-            self,
-            device_type,
-            ip=_DEFAULT_TCP_IP,
-            port=_DEFAULT_TCP_PORT
+        self,
+        ip=_DEFAULT_TCP_IP,
+        port=_DEFAULT_TCP_PORT
     ):
         self._IP = ip
         self._PORT = port
         self._client_socket = None
         self._client_address = None
-        self._device_type = device_type
 
     def accept_client(self):
         self._client_socket, self._client_address = self.server_socket.accept()
@@ -36,10 +33,6 @@ class DeviceGatewayRunner:
     @property
     def max_allowed_clients(self):
         return self._MAX_ALLOWED_CLIENTS
-
-    @property
-    def device_type(self):
-        return self._device_type
 
     def open(self):
         self._CAN_config()
@@ -64,5 +57,5 @@ class DeviceGatewayRunner:
         return f"Connected with client: {self.client_address}"
 
     def close(self):
-        self._client_socket.close()
+        self._client_socket.main_close()
         self._bus.shutdown()
