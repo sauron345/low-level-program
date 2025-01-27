@@ -10,8 +10,8 @@ class DeviceAStub:
 
     def __init__(self,
         ip,
+        can_frame,
         port=_DEFAULT_PORT,
-        can_frame=b'\x01\x23\x45\x67\x89\xAB\xCD\xEF',
         interval=_DEFAULT_INTERVAL,
         block_c_reserved=False
     ):

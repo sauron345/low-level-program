@@ -4,25 +4,25 @@ from device_B.device_b_emulator import DeviceBEmulator
 def init_device_b_emulators():
     dev_b_emulator_for_block_c = DeviceBEmulator(
         ip='127.0.0.1',  # for example
-        can_frame=b'...',
+        can_frame=b'\x85\x12\x34\x56\x78\x12\x34\x56\x78\x00\x00\x00',
         block_c_reserved=True,  # for example
         interval=0.1  # for example
     )
     dev_b_emulator_2 = DeviceBEmulator(
         ip='127.0.0.2',
-        can_frame=b'...',
+        can_frame=b'\x01\x23\x45\x67\x89\xAB\xCD\xEF',
         interval=0.3
     )
 
     dev_b_emulator_3 = DeviceBEmulator(
         ip='127.0.0.3',
-        can_frame=b'...',
+        can_frame=b'\x01\x23\x45\x67\x89\xAB\xCD\xEF',
         interval=0.5
     )
 
     dev_b_emulator_4 = DeviceBEmulator(
         ip='127.0.0.4',
-        can_frame=b'...',
+        can_frame=b'\x01\x23\x45\x67\x89\xAB\xCD\xEF',
         interval=0.7
     )
 
