@@ -8,14 +8,8 @@ class StorageHandler:
 
     def __init__(self, path):
         self._PATH = path
-        if not os.path.isfile(path):
-            self._file_obj = open(self._PATH, 'wb+')
-            self._init_state()
-        else:
-            self._file_obj = open(self._PATH, 'rb+')
-            self._file_obj.seek(-1, os.SEEK_END)
-            self._file_obj.truncate()
-            self._write_to_file("]")
+        self._file_obj = open(self._PATH, 'wb+')
+        self._init_state()
 
     def _init_state(self):
         self._file_obj.seek(0)
@@ -28,9 +22,13 @@ class StorageHandler:
 
     def get_data(self):
         items_found = []
-        self._file_obj.seek(0)
-        for item in ijson.items(self._file_obj, 'item'):
-            items_found.append(item)
+        with open(self._PATH, 'rb') as file:
+            file.seek(0)
+            try:
+                for item in ijson.items(file, 'item'):
+                    items_found.append(item)
+            except (ijson.common.IncompleteJSONError, ijson.common.JSONError):
+                pass
         return items_found
 
     def add_new(self, data):

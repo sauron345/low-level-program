@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views import View
 
-from device_B.frames_sender_form import FramesSenderForm
-from recruitment_task_krypton.string_frame_converter import StringFrameConverter
+from device_B.frames_sender.frames_sender_form import FramesSenderForm
+from recruitment_task_krypton.utils.string_frame_converter import StringFrameConverter
 
 
 class FramesSenderHandler(View):
@@ -37,7 +37,7 @@ class FramesSenderHandler(View):
     def _send_to_client_if_valid(self, str_bytes):
         from recruitment_task_krypton.startup import device_b_gateway_controller
 
-        if str_bytes != 'Invalid':
+        if str_bytes:
             device_b_gateway_controller.send(str_bytes)
         else:
             print("Passed invalid bytes")

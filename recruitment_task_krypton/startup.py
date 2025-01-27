@@ -2,27 +2,13 @@ import threading
 
 from django.core.cache import cache
 
-from block_C.arithmetic_operation import ArithmeticOperation
-from device_B.watchdog import Watchdog
-from recruitment_task_krypton.device_a_gateway_controller import DeviceAGatewayController
-from recruitment_task_krypton.device_b_gateway_controller import DeviceBGatewayController
-from recruitment_task_krypton.device_gateway_runner import DeviceGatewayRunner
-from django.conf import settings
-from recruitment_task_krypton.storage_handler import StorageHandler
-
-
-device_a_gateway = None
-device_b_gateway = None
-device_a_gateway_controller = None
-device_b_gateway_controller = None
-dev_a_storage_handler = None
-dev_b_storage_handler = None
-block_c_storage_handler = None
-dev_a_clients_storage = None
-dev_b_clients_storage = None
-watchdog = None
-watchdog_obj = None
-arithmetic_operation = None
+from recruitment_task_krypton.init_states.globals import *
+from recruitment_task_krypton.init_states.gateways import init_gateways
+from recruitment_task_krypton.init_states.storage_handlers import init_storage_handlers
+from recruitment_task_krypton.init_states.watchdog import init_watchdog
+from recruitment_task_krypton.init_states.block_c import init_block_c
+from recruitment_task_krypton.init_states.device_a_stubs import init_device_a_stubs
+from recruitment_task_krypton.init_states.device_b_emulators import init_device_b_emulators
 
 
 def main_start():
@@ -31,42 +17,32 @@ def main_start():
     elif cache.get('main_start_executed'):
        return
 
-    global device_a_gateway
-    global device_b_gateway
-    global device_a_gateway_controller
-    global device_b_gateway_controller
-    global dev_a_storage_handler
-    global dev_b_storage_handler
-    global block_c_storage_handler
-    global dev_a_clients_storage
-    global dev_b_clients_storage
-    global watchdog
-    global watchdog_obj
-    global arithmetic_operation
+    global device_a_gateway, device_b_gateway
+    global device_a_gateway_controller, device_b_gateway_controller, device_gateway_a_runner, device_gateway_b_runner
+    global dev_a_storages_handlers, dev_b_storages_handlers, block_c_storage_handler
+    global dev_a_clients_storage, dev_b_clients_storage
+    global watchdog, watchdog_obj
+    global device_b_clients, device_a_clients
+    global arithmetic_operation_obj, arithmetic_operation
 
-    dev_a_storage_handler = StorageHandler(settings.BASE_DIR / 'logs_storages/device_a.json')
-    dev_b_storage_handler = StorageHandler(settings.BASE_DIR / 'logs_storages/device_b.json')
-    block_c_storage_handler = StorageHandler(settings.BASE_DIR / 'logs_storages/block_c.json')
-
-    device_gateway_a_runner = DeviceGatewayRunner()
-    device_gateway_b_runner = DeviceGatewayRunner(port=4000)
-
-    device_a_gateway_controller = DeviceAGatewayController(device_gateway_a_runner)
-    device_b_gateway_controller = DeviceBGatewayController(device_gateway_b_runner)
-
-    device_a_gateway = threading.Thread(target=device_a_gateway_controller.run, daemon=True)
-    device_b_gateway = threading.Thread(target=device_b_gateway_controller.run, daemon=True)
-
-    watchdog_obj = Watchdog()
-    watchdog = threading.Thread(target=watchdog_obj.reset, daemon=True)
-
-    # arithmetic_operation_obj = ArithmeticOperation()
-    # arithmetic_operation = threading.Thread(target=ArithmeticOperation.execute, daemon=True)
+    device_b_clients = init_device_b_emulators()
+    device_a_clients = init_device_a_stubs()
+    device_gateway_a_runner, device_gateway_b_runner, device_a_gateway_controller, device_b_gateway_controller, device_a_gateway, device_b_gateway = init_gateways()
+    dev_a_storages_handlers, dev_b_storages_handlers, block_c_storage_handler = init_storage_handlers(device_a_clients, device_b_clients)
+    watchdog_obj, watchdog = init_watchdog()
+    arithmetic_operation_obj, arithmetic_operation = init_block_c(device_a_clients, device_b_clients)
 
     device_a_gateway.start()
     device_b_gateway.start()
+
+    for client in device_b_clients:
+        threading.Thread(target=client.run).start()
+
+    for client in device_a_clients:
+        threading.Thread(target=client.run).start()
+
     watchdog.start()
-    # arithmetic_operation.start()
+    arithmetic_operation.start()
 
 
 def main_close():
@@ -75,9 +51,20 @@ def main_close():
 
     device_a_gateway_controller.close()
     device_b_gateway_controller.close()
-    watchdog_obj.close()
-    # arithmetic_operation.close()
 
-    dev_a_storage_handler.close()
-    dev_b_storage_handler.close()
+    arithmetic_operation_obj.close()
+    watchdog_obj.close()
+
+    for client in device_b_clients:
+        client.close()
+
+    for client in device_a_clients:
+        client.close()
+
     block_c_storage_handler.close()
+
+    for storage_handler in dev_a_storages_handlers:
+        storage_handler.close()
+
+    for storage_handler in dev_b_storages_handlers:
+        storage_handler.close()

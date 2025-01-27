@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-from recruitment_task_krypton.errors_handler import error_handler
+from recruitment_task_krypton.utils.errors_handler import error_handler
 
 urlpatterns = [
     path('app/', include('app.urls')),

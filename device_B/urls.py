@@ -1,6 +1,6 @@
 from django.urls import path
 
-from device_B.frames_sender_handler import FramesSenderHandler
+from device_B.frames_sender.frames_sender_handler import FramesSenderHandler
 from device_B.state_handler import StateHandler
 
 urlpatterns = [

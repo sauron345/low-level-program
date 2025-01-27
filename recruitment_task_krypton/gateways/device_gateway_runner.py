@@ -1,5 +1,4 @@
 import socket
-import can
 
 
 class DeviceGatewayRunner:
@@ -35,14 +34,8 @@ class DeviceGatewayRunner:
         return self._MAX_ALLOWED_CLIENTS
 
     def open(self):
-        self._CAN_config()
         self._tcp_server_init()
         print(self._server_listening_msg())
-
-    def _CAN_config(self):
-        # can_interface = "can0"
-        # bus = can.interface.Bus(channel=can_interface, interface='pcan')
-        self._bus = can.interface.Bus(channel='virtual', interface='virtual')
 
     def _tcp_server_init(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,8 +47,7 @@ class DeviceGatewayRunner:
         return f"TCP Server listening on {self._IP}: {self._PORT}"
 
     def _client_connected_msg(self):
-        return f"Connected with client: {self.client_address}"
+        return f"Connected with client: {self.client_socket.getsockname()}"
 
     def close(self):
-        self._client_socket.main_close()
-        self._bus.shutdown()
+        self._client_socket.close()

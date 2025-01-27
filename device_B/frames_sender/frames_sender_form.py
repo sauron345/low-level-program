@@ -8,7 +8,7 @@ class FramesSenderForm(forms.Form):
             'rows': 3,
             'cols': 50,
             'style': "resize: none;",
-            'oninput': 'auto_spaces_for_lines(this)'
+            'oninput': 'auto_spaces_for_frames(this)'
         }),
         label=""
     )

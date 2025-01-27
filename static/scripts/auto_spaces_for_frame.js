@@ -1,4 +1,4 @@
-function auto_spaces_for_line(textarea) {
+function auto_spaces_for_frame(textarea) {
     let value = textarea.value;
 
     value = value.replace(/\s+/g, '');

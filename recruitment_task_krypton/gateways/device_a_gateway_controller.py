@@ -1,8 +1,8 @@
 import threading
 
-from recruitment_task_krypton.device_clients_storage import DeviceClientsStorage
-from recruitment_task_krypton.extractor_can_tcp_data import ExtractorCanTcpData
-from recruitment_task_krypton.singleton_meta import SingletonMeta
+from recruitment_task_krypton.utils.device_clients_storage import DeviceClientsStorage
+from recruitment_task_krypton.utils.extractor_can_tcp_data import ExtractorCanTcpData
+from recruitment_task_krypton.utils.singleton_meta import SingletonMeta
 
 dev_a_clients_storage = DeviceClientsStorage()
 
@@ -14,15 +14,11 @@ class DeviceAGatewayController(threading.Thread, metaclass=SingletonMeta):
         self._init_state(device_gateway)
 
     def _init_state(self, device_gateway):
-        self._assign_storage_handler()
         self._device_gateway = device_gateway
         self._device_gateway.open()
         self._running = True
         self._lock = threading.Lock()
-
-    def _assign_storage_handler(self):
-        from recruitment_task_krypton.startup import dev_a_storage_handler
-        self._dev_storage_handler = dev_a_storage_handler
+        self._clients_sockets_storage = {}
 
     def run(self):
         try:
@@ -31,7 +27,6 @@ class DeviceAGatewayController(threading.Thread, metaclass=SingletonMeta):
             print(f"Error occurred: {e}")
         finally:
             self._device_gateway.close()
-            print("Server is closed")
 
     def _check_if_new_client_occurred(self):
         while self._running:
@@ -43,37 +38,46 @@ class DeviceAGatewayController(threading.Thread, metaclass=SingletonMeta):
 
     def _accept_and_communicate_with_client(self):
         self._device_gateway.accept_client()
-
         self._add_new_client()
+        self._store_client_storage_handler()
 
         client_thread = threading.Thread(
             target=self._handle_client,
-            args=(self._client_socket,),
-            daemon=True
+            args=(self._client_socket,)
         )
         client_thread.start()
 
     def _add_new_client(self):
         dev_a_clients_storage.add(self._client_socket)
 
+    def _store_client_storage_handler(self):
+        from recruitment_task_krypton.startup import dev_a_storages_handlers
+
+        index = len(self._clients_sockets_storage)
+        client_ip, _ = self._client_socket.getsockname()
+        self._clients_sockets_storage[client_ip] = dev_a_storages_handlers[index]
+
     def _handle_client(self, client_socket):
         try:
             while self._running:
-                data = client_socket.recv(1024)  # Odbieranie danych od klienta
+                data = client_socket.recv(1024)
                 if not data or self._count_clients() < 1:
                     break
-                print(f"Received data: {data.hex()}")
                 extracted_data = self._get_in_readable_way(data)
-                self._dev_storage_handler.add_new(extracted_data)
+                self._add_to_storage_handler(extracted_data, client_socket)
         except ConnectionError:
-            print(f"Connection with client{self._client_address} is interrupted")
+            print("Connection with client is interrupted")
         finally:
             self._discard_client(client_socket)
             client_socket.close()
-            print(f"Connection with client{self._client_address} is finished.")
+            print("Connection with client is finished.")
 
     def _count_clients(self):
         return dev_a_clients_storage.count()
+
+    def _add_to_storage_handler(self, extracted_data, client_socket):
+        client_ip, _ = client_socket.getsockname()
+        self._clients_sockets_storage[client_ip].add_new(extracted_data)
 
     def _discard_client(self, client_socket):
         dev_a_clients_storage.discard(client_socket)

@@ -8,7 +8,7 @@ class StateHandler(APIView):
     def get(self, request, *args, **kwargs):
         from recruitment_task_krypton.startup import block_c_storage_handler
 
-        arithmetic_operations = block_c_storage_handler.get_data()
-        if arithmetic_operations:
-            return Response(arithmetic_operations, status=status.HTTP_200_OK)
+        results = block_c_storage_handler.get_data()
+        if results:
+            return Response(results, status=status.HTTP_200_OK)
         return Response({'error': 'Arithmetic operations not found'}, status=status.HTTP_404_NOT_FOUND)

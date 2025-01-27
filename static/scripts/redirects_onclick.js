@@ -18,10 +18,6 @@ document.getElementById('device-b-frames-sender').addEventListener('click', (e) 
     redirect_to("/app/device-b/frames-sender")
 });
 
-document.getElementById('device-b-edit-config').addEventListener('click', (e) => {
-    redirect_to("/app/device-b/edit-config")
-});
-
 document.getElementById('app-edit-config').addEventListener('click', (e) => {
     redirect_to("/app/edit-config")
 });

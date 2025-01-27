@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 
-from recruitment_task_krypton.singleton_meta import SingletonMeta
+from recruitment_task_krypton.utils.singleton_meta import SingletonMeta
 
 
 class ErrorsHandler(View, metaclass=SingletonMeta):
