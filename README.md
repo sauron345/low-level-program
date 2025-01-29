@@ -29,7 +29,13 @@ w którym omówię najważniejsze konfiguracje, a są nimi:
 - bramki, w tym przypadku obiektom ***DeviceGatewayRunner*** można zmienić domyślny port oraz ip (domyślnie '0.0.0.0')
 
 
-Aby uruchomić serwer, należy użyć polecenie:
+Aby uruchomić serwer, należy przejść do katalogu głównego projektu, ponieważ znajduje się w nim plik 'manage.py':
+
+```git bash
+cd ROOT_DIR
+```
+
+i po tym dopiero:
 
 ```git bash
 py manage.py runserver
