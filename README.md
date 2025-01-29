@@ -1,7 +1,7 @@
 Żeby program działał jak powinien, trzeba przejść do katalogu:
 
 ```path
-ROOT_DIR/recruitment_task_krypton/init_states
+ROOT_DIR/low_level_program/init_states
 ```
 
 w którym omówię najważniejsze konfiguracje, a są nimi:

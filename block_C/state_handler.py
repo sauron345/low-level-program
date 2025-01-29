@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 class StateHandler(APIView):
 
     def get(self, request, *args, **kwargs):
-        from recruitment_task_krypton.startup import block_c_storage_handler
+        from low_level_program.startup import block_c_storage_handler
 
         results = block_c_storage_handler.get_data()
         if results:

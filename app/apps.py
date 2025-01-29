@@ -2,7 +2,7 @@ from django.core.signals import request_started
 
 from django.apps import AppConfig
 
-from recruitment_task_krypton.startup import main_start
+from low_level_program.startup import main_start
 
 
 class Gateways(AppConfig):

@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from threading import Lock
 
-from recruitment_task_krypton.utils.extractor_can_tcp_data import ExtractorCanTcpData
+from low_level_program.utils.extractor_can_tcp_data import ExtractorCanTcpData
 
 
 class ArithmeticOperation:
@@ -34,7 +34,7 @@ class ArithmeticOperation:
         return ['+', '-', '*', '/']
 
     def execute(self):
-        from recruitment_task_krypton.startup import block_c_storage_handler
+        from low_level_program.startup import block_c_storage_handler
 
         while self._running:
             data = self._get_proper_params_result() + self._get_realtime_in_seconds()

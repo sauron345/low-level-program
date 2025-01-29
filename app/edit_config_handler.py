@@ -4,7 +4,7 @@ from django.views import View
 from app.forms.arithmetic_operator_form import ArithmeticOperatorForm
 from app.forms.reset_frame_form import ResetFrameForm
 from block_C.arithmetic_operation import ArithmeticOperation
-from recruitment_task_krypton.utils.string_frame_converter import StringFrameConverter
+from low_level_program.utils.string_frame_converter import StringFrameConverter
 
 
 class EditConfigHandler(View):
@@ -46,13 +46,13 @@ class EditConfigHandler(View):
 
         bytes_frame = str_frame_converter.get_in_bytes()
         if bytes_frame:
-            from recruitment_task_krypton.startup import watchdog_obj
+            from low_level_program.startup import watchdog_obj
             watchdog_obj.reset_frame = bytes_frame
         else:
             print("Passed invalid frame")
 
     def _set_arithmetic_operation_if_valid(self, arithmetic_operator):
-        from recruitment_task_krypton.startup import arithmetic_operation_obj
+        from low_level_program.startup import arithmetic_operation_obj
 
         if arithmetic_operator in ArithmeticOperation.allowed_operators():
             arithmetic_operation_obj.operator = arithmetic_operator

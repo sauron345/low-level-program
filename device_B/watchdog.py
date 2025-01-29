@@ -1,8 +1,8 @@
 import time
 from threading import Lock
 
-from recruitment_task_krypton.gateways.device_b_gateway_controller import dev_b_clients_storage
-from recruitment_task_krypton.utils.singleton_meta import SingletonMeta
+from low_level_program.gateways.device_b_gateway_controller import dev_b_clients_storage
+from low_level_program.utils.singleton_meta import SingletonMeta
 
 
 class Watchdog(metaclass=SingletonMeta):

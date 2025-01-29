@@ -7,7 +7,7 @@ import webbrowser
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recruitment_task_krypton.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'low_level_program.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

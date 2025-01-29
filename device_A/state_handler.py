@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 class StateHandler(APIView):
 
     def get(self, request, *args, **kwargs):
-        from recruitment_task_krypton.startup import dev_a_storages_handlers
+        from low_level_program.startup import dev_a_storages_handlers
 
         frames_data = []
         for storage_handler in dev_a_storages_handlers:
